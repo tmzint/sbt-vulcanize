@@ -14,7 +14,7 @@ object Import {
         val inlineScripts = SettingKey[Boolean]("vulcanize-inline-scripts", "Inline external scripts.")
         val inlineCss = SettingKey[Boolean]("vulcanize-inline-css", "Inline external stylesheets.")
         val exclude = SettingKey[Seq[String]]("vulcanize-exclude", "Exclude subpaths from root.")
-        val stripExclude = SettingKey[String]("vulcanize-strip-exclude", "Exclude a subpath and strip the link that includes it.")
+        val stripExclude = SettingKey[Seq[String]]("vulcanize-strip-exclude", "Exclude a subpath and strip the link that includes it.")
         val stripComments = SettingKey[Boolean]("vulcanize-strip-comments", "Strips all HTML comments not containing an @license from the document.")
         val noImplicitStrip = SettingKey[Boolean]("vulcanize-no-implicit-strip", "DANGEROUS! Avoid stripping imports of the transitive dependencies of imports specified with `--exclude`. May result in duplicate javascript inlining.")
         val abspath = SettingKey[Boolean]("vulcanize-abspath", "Make all adjusted urls absolute.")
@@ -42,13 +42,13 @@ object SbtVulcanize extends AutoPlugin {
 
     val vulcanizeUnscopedSettings = Seq(
 
-        //includeFilter := GlobFilter("main.less"),
+        includeFilter := GlobFilter("main.html"),
 
         jsOptions := JsObject(
             "inlineScripts" -> JsBoolean(inlineScripts.value),
             "inlineCss" -> JsBoolean(inlineCss.value),
             "exclude" -> JsArray(exclude.value.map(JsString(_)).toVector),
-            "stripExclude" -> JsString(stripExclude.value),
+            "stripExclude" -> JsArray(stripExclude.value.map(JsString(_)).toVector),
             "stripComments" -> JsBoolean(stripComments.value),
             "noImplicitStrip" -> JsBoolean(noImplicitStrip.value),
             "abspath" -> JsBoolean(abspath.value)
@@ -59,7 +59,7 @@ object SbtVulcanize extends AutoPlugin {
         inlineScripts := false,
         inlineCss := false,
         exclude := Seq.empty,
-        stripExclude := "",
+        stripExclude := Seq.empty,
         stripComments := false,
         noImplicitStrip := false,
         abspath := false

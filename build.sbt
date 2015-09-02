@@ -3,30 +3,26 @@ import com.typesafe.sbt.web.SbtWeb
 import SbtWeb.autoImport._
 import WebKeys._
 import sbt.ScriptedPlugin._
-
-organization := "com.tmzint.sbt"
-name := "sbt-vulcanize"
-description := "sbt-web vulcanize plugin"
-
-scalaVersion := "2.10.4"
-sbtPlugin := true
-
-libraryDependencies ++= Seq(
-)
-
-lazy val root = (project in file(".")).enablePlugins(SbtWeb)
+import bintray.Keys._
 
 addSbtPlugin("com.typesafe.sbt" %% "sbt-js-engine" % "1.1.2")
 
-publishMavenStyle := false
+lazy val commonSettings = Seq(
+    scalaVersion := "2.10.4",
+    version in ThisBuild := "0.1.0",
+    organization in ThisBuild := "com.tmzint.sbt"
+)
 
-publishTo := {
-    if (isSnapshot.value) Some(Classpaths.sbtPluginSnapshots)
-    else Some(Classpaths.sbtPluginReleases)
-}
-
-scriptedSettings
-
-scriptedLaunchOpts <+= version apply { v => s"-Dproject.version=$v" }
-
-scriptedBufferLog := false
+lazy val root = (project in file(".")).
+    settings(commonSettings ++ bintrayPublishSettings: _*).
+    settings(
+        sbtPlugin := true,
+        name := "sbt-vulcanize",
+        description := "sbt-web vulcanize plugin",
+        licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
+        publishMavenStyle := false,
+        repository in bintray := "sbt-plugins",
+        bintrayOrganization in bintray := None,
+        libraryDependencies ++= Seq(
+        )
+    ).enablePlugins(SbtWeb)

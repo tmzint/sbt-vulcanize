@@ -1,4 +1,7 @@
 # Vulcanize a webcomponent file
 
 > assets
-$ exists target/web/public/main/main.html
+$ exists target/web/public/main/html/main.html
+
+# Check variable presence
+# > checkFileContents
