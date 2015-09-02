@@ -12,7 +12,7 @@ import ReleaseKeys._
 
 releaseSettings
 
-publishArtifactsAction := PgpKeys.publishSigned.value
+//publishArtifactsAction := PgpKeys.publishSigned.value
 
 tagName := (version in ThisBuild).value
 
