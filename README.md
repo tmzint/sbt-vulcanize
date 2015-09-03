@@ -32,7 +32,7 @@ By default `main.html` is the entry point fed to Vulcanize. Beyond just `main.ht
 following, which uses all html files not starting with an `_` as entry points:
 
 ```scala
-includeFilter in (Assets, LessKeys.less) := "*.html"
+includeFilter in (Assets, VulcanizeKeys.vulcanize) := "*.html"
 
-excludeFilter in (Assets, LessKeys.less) := "_*.html"
+excludeFilter in (Assets, VulcanizeKeys.vulcanize) := "_*.html"
 ```
