@@ -1,6 +1,8 @@
 lazy val root = (project in file(".")).enablePlugins(SbtWeb)
 
-includeFilter in(Assets, VulcanizeKeys.vulcanize) := "main.html"
+pipelineStages := Seq(vulcanize)
+
+//includeFilter in vulcanize := "main.html"
 
 //val checkFileContents = taskKey[Unit]("Check for emptiness")
 //

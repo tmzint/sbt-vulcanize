@@ -8,49 +8,44 @@
     var mkdirp = require("mkdirp");
     var path = require("path");
 
-    var SOURCE_FILE_MAPPINGS_ARG = 2;
-    var TARGET_ARG = 3;
-    var OPTIONS_ARG = 4;
+    var SOURCE_FILE_ARG = 2;
+    var OUT_FILE_ARG = 3;
+    var TARGET_ARG = 4;
+    var OPTIONS_ARG = 5;
 
-    var sourceFileMappings = JSON.parse(_args[SOURCE_FILE_MAPPINGS_ARG]);
+    var input = _args[SOURCE_FILE_ARG];
+    var outExt = _args[OUT_FILE_ARG];
     var target = _args[TARGET_ARG];
-    var optionsString = _args[OPTIONS_ARG];
-    var options = JSON.parse(optionsString);
+    var options = JSON.parse(_args[OPTIONS_ARG]);
+    var output = path.join(target, outExt);
 
-    sourceFileMappings.forEach(function (sourceFileMapping) {
+    var args = {};
+    args.excludes = options.exclude;
+    args.stripExcludes = options.stripExclude;
+    args.stripComments = options.stripComments;
+    args.implicitStrip = !options.noImplicitStrip;
+    args.inlineScripts = options.inlineScripts;
+    args.inlineCss = options.inlineCss;
 
-        var input = sourceFileMapping[0];
-        var outputFile = sourceFileMapping[1];
-        var output = path.join(target, outputFile);
+    var writeOutput = function (content, onDone) {
+        mkdirp(path.dirname(output), function (e) {
+            if (e) throw e;
+            fs.writeFile(output, content, "utf8", onDone);
+        });
+    };
 
-        var args = {};
-        args.excludes = options.exclude;
-        args.stripExcludes = options.stripExclude;
-        args.stripComments = options.stripComments;
-        args.implicitStrip = !options.noImplicitStrip;
-        args.inlineScripts = options.inlineScripts;
-        args.inlineCss = options.inlineCss;
+    (new vulcan(args)).process(input, function(err, content) {
 
-        var writeOutput = function (content, onDone) {
-            mkdirp(path.dirname(output), function (e) {
-                if (e) throw e;
-                fs.writeFile(output, content, "utf8", onDone);
-            });
-        };
+        if (err) {
+            process.stderr.write(require('util').inspect(err));
+            process.exit(1);
+        }
 
-        (new vulcan(args)).process(input, function(err, content) {
-
-            if (err) {
-                process.stderr.write(require('util').inspect(err));
-                process.exit(1);
-            }
-
-            writeOutput(content, function (e) {
-                if (e) throw e;
-                console.log(input + " -> " + output);
-            });
-
+        writeOutput(content, function (e) {
+            if (e) throw e;
+            console.log(input + " -> " + output);
         });
 
     });
+
 })();
