@@ -57,8 +57,8 @@ object SbtVulcanize extends AutoPlugin {
     )
 
     override def projectSettings = Seq(
-        includeFilter in vulcanize := GlobFilter("*.html") | GlobFilter("*.js") | GlobFilter("*.css"),
-        excludeFilter in vulcanize := HiddenFileFilter || (GlobFilter("_*.html") | GlobFilter("_*.js") | GlobFilter("_*.css")),
+        includeFilter in vulcanize := "main.html",
+        excludeFilter in vulcanize := HiddenFileFilter,
         resourceManaged in vulcanize := webTarget.value / vulcanize.key.label,
         inlineScripts := false,
         inlineCss := false,

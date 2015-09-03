@@ -15,7 +15,11 @@ Your project's build file also needs to enable sbt-web plugins. For example with
 lazy val root = (project in file(".")).enablePlugins(SbtWeb)
 ```
 
-The plugin allows the use of all options of the vulcanize cli [https://github.com/polymer/vulcanize] (at point of writing).
+```scala
+pipelineStages := Seq(vulcanize)
+```
+
+The plugin allows the use of all options of the vulcanize cli https://github.com/polymer/vulcanize - at point of writing.
 
 Option              | Description
 --------------------|------------
@@ -32,7 +36,7 @@ By default `main.html` is the entry point fed to Vulcanize. Beyond just `main.ht
 following, which uses all html files not starting with an `_` as entry points:
 
 ```scala
-includeFilter in (Assets, LessKeys.less) := "*.html"
+includeFilter in vulcanize := GlobFilter("*.html")
 
-excludeFilter in (Assets, LessKeys.less) := "_*.html"
+excludeFilter in vulcanize := (GlobFilter("_*.html")
 ```
