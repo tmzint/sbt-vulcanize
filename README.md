@@ -6,7 +6,7 @@ Allows the usage of vulcanize from within sbt.
 Use the addSbtPlugin in your project's plugins.sbt:
 
 ```scala
-addSbtPlugin("com.tmzint.sbt" % "sbt-vulcanize" % "0.1.0")
+addSbtPlugin("com.tmzint.sbt" % "sbt-vulcanize" % "0.2.0")
 ```
 
 Your project's build file also needs to enable sbt-web plugins. For example with build.sbt:
