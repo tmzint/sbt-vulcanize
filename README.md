@@ -15,7 +15,7 @@ Your project's build file also needs to enable sbt-web plugins. For example with
 lazy val root = (project in file(".")).enablePlugins(SbtWeb)
 ```
 
-The plugin allows the use of all options of the vulcanize cli [https://github.com/polymer/vulcanize] (at point of writing).
+The plugin allows the use of all options of the vulcanize cli [https://github.com/polymer/vulcanize]; at point of writing.
 
 Option              | Description
 --------------------|------------
