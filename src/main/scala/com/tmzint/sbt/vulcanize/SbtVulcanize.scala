@@ -42,7 +42,7 @@ object SbtVulcanize extends AutoPlugin {
     import autoImport._
     import VulcanizeKeys._
 
-    //TODO: depend on web-assets:jseNpmNodeModules
+    //TODO: fetch node dependencies; web-assets:jseNpmNodeModules
 
     val vulcanizeUnscopedSettings = Seq(
         jsOptions := JsObject(
@@ -68,7 +68,7 @@ object SbtVulcanize extends AutoPlugin {
         noImplicitStrip := false,
         abspath := false,
         vulcanize := runVulcanize.value
-    )
+    ) ++ inTask(vulcanize)(vulcanizeUnscopedSettings)
     /*++ inTask(Import.vulcanize)(
         SbtJsTask.jsTaskSpecificUnscopedSettings ++
             inConfig(Assets)(vulcanizeUnscopedSettings) ++
@@ -105,16 +105,6 @@ object SbtVulcanize extends AutoPlugin {
                 streams.value.cacheDirectory
             )
 
-            val jsOptions = JsObject(
-                "inlineScripts" -> JsBoolean(inlineScripts.value),
-                "inlineCss" -> JsBoolean(inlineCss.value),
-                "exclude" -> JsArray(exclude.value.map(JsString(_)).toVector),
-                "stripExclude" -> JsArray(stripExclude.value.map(JsString(_)).toVector),
-                "stripComments" -> JsBoolean(stripComments.value),
-                "noImplicitStrip" -> JsBoolean(noImplicitStrip.value),
-                "abspath" -> JsBoolean(abspath.value)
-            ).toString()
-
             val cacheDirectory = streams.value.cacheDirectory / vulcanize.key.label
             val runUpdate = FileFunction.cached(cacheDirectory, FilesInfo.hash) { _ =>
                 mappingsFiltered.foreach( m => {
@@ -125,7 +115,7 @@ object SbtVulcanize extends AutoPlugin {
                         (command in vulcanize).value,
                         Seq.empty,
                         js,
-                        Seq(m._1.getPath, m._2, (resourceManaged in vulcanize).value.getPath, jsOptions),
+                        Seq(m._1.getPath, m._2, (resourceManaged in vulcanize).value.getPath, (jsOptions in vulcanize).value),
                         (timeoutPerSource in vulcanize).value * mappingsFiltered.size
                     )
                 })
