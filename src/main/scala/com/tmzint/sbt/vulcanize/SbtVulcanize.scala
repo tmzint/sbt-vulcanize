@@ -42,8 +42,6 @@ object SbtVulcanize extends AutoPlugin {
     import autoImport._
     import VulcanizeKeys._
 
-    //TODO: fetch node dependencies; web-assets:jseNpmNodeModules
-
     val vulcanizeUnscopedSettings = Seq(
         jsOptions := JsObject(
             "inlineScripts" -> JsBoolean(inlineScripts.value),
@@ -67,23 +65,11 @@ object SbtVulcanize extends AutoPlugin {
         stripComments := false,
         noImplicitStrip := false,
         abspath := false,
-        vulcanize := runVulcanize.value
-    ) ++ inTask(vulcanize)(vulcanizeUnscopedSettings)
-    /*++ inTask(Import.vulcanize)(
-        SbtJsTask.jsTaskSpecificUnscopedSettings ++
-            inConfig(Assets)(vulcanizeUnscopedSettings) ++
-            inConfig(TestAssets)(vulcanizeUnscopedSettings) ++
-            Seq(
-                moduleName := "vulcanize",
-                shellFile := getClass.getClassLoader.getResource("vulcanizec.js"),
-
-                taskMessage in Assets := "vulcanization",
-                taskMessage in TestAssets := "test vulcanization"
-            )
-    ) ++ SbtJsTask.addJsSourceFileTasks(Import.vulcanize) ++ Seq(
-        Import.vulcanize in Assets := (Import.vulcanize in Assets).dependsOn(webModules in Assets).value,
-        Import.vulcanize in TestAssets := (Import.vulcanize in TestAssets).dependsOn(webModules in TestAssets).value
-    )*/
+        vulcanize := runVulcanize.dependsOn(webJarsNodeModules in Plugin).value
+    ) ++ inTask(vulcanize)(vulcanizeUnscopedSettings) ++ Seq(
+        vulcanize in Assets := (vulcanize in Assets).dependsOn(webModules in Assets).value,
+        vulcanize in TestAssets := (vulcanize in TestAssets).dependsOn(webModules in TestAssets).value
+    )
 
     private def runVulcanize: Def.Initialize[Task[Pipeline.Stage]] = Def.task {
         mappings =>

@@ -3,10 +3,23 @@ sbt-vulcanize
 
 Allows the usage of vulcanize from within sbt.
 
+Needs vulcanize and mkdirp installed in node path:
+
+ ```js
+ {
+    ...
+   "dependencies": {
+     "vulcanize": "^1.10.4",
+     "mkdirp": "^0.5.0"
+   },
+    ...
+ }
+ ```
+
 Use the addSbtPlugin in your project's plugins.sbt:
 
 ```scala
-addSbtPlugin("com.tmzint.sbt" % "sbt-vulcanize" % "0.2.0")
+addSbtPlugin("com.tmzint.sbt" % "sbt-vulcanize" % "0.3.0")
 ```
 
 Your project's build file also needs to enable sbt-web plugins. For example with build.sbt:
