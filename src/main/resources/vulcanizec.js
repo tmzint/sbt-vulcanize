@@ -26,6 +26,8 @@
     args.implicitStrip = !options.noImplicitStrip;
     args.inlineScripts = options.inlineScripts;
     args.inlineCss = options.inlineCss;
+    args.addedImports = options.addImport;
+    args.redirects = options.redirect;
 
     var writeOutput = function (content, onDone) {
         mkdirp(path.dirname(output), function (e) {

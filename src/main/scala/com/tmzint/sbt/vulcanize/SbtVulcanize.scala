@@ -20,6 +20,8 @@ object Import {
         val stripComments = SettingKey[Boolean]("vulcanize-strip-comments", "Strips all HTML comments not containing an @license from the document.")
         val noImplicitStrip = SettingKey[Boolean]("vulcanize-no-implicit-strip", "DANGEROUS! Avoid stripping imports of the transitive dependencies of imports specified with `--exclude`. May result in duplicate javascript inlining.")
         val abspath = SettingKey[Boolean]("vulcanize-abspath", "Make all adjusted urls absolute.")
+        val addImport = SettingKey[Seq[String]]("vulcanize-add-import", "Add these imports to the target HTML before vulcanizing.")
+        val redirect = SettingKey[Seq[String]]("vulcanize-redirect", "Takes arguments in the form of URI | PATH where url is a URI composed of a protocol, hostname, and path and PATH is a local filesystem path to replace the matched URI part with. Multiple redirects may be specified; the earliest ones have the highest priority.")
     }
 
 }
@@ -50,7 +52,9 @@ object SbtVulcanize extends AutoPlugin {
             "stripExclude" -> JsArray(stripExclude.value.map(JsString(_)).toVector),
             "stripComments" -> JsBoolean(stripComments.value),
             "noImplicitStrip" -> JsBoolean(noImplicitStrip.value),
-            "abspath" -> JsBoolean(abspath.value)
+            "abspath" -> JsBoolean(abspath.value),
+            "addImport" -> JsArray(addImport.value.map(JsString(_)).toVector),
+            "redirect" -> JsArray(redirect.value.map(JsString(_)).toVector)
         ).toString()
     )
 
@@ -65,6 +69,8 @@ object SbtVulcanize extends AutoPlugin {
         stripComments := false,
         noImplicitStrip := false,
         abspath := false,
+        addImport := Seq.empty,
+        redirect := Seq.empty,
         vulcanize := runVulcanize.dependsOn(webJarsNodeModules in Plugin).value
     ) ++ inTask(vulcanize)(vulcanizeUnscopedSettings) ++ Seq(
         vulcanize in Assets := (vulcanize in Assets).dependsOn(webModules in Assets).value,

@@ -1,9 +1,9 @@
 {
   "name": "sbt-vulcanize",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "sbt-web plugin for vulcanize",
   "dependencies": {
-    "vulcanize": "^1.10.4",
+    "vulcanize": "^1.14.0",
     "mkdirp": "^0.5.0"
   },
   "author": "timo merlin zint",
