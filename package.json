@@ -1,6 +1,6 @@
 {
   "name": "sbt-vulcanize",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "sbt-web plugin for vulcanize",
   "dependencies": {
     "vulcanize": "^1.14.0",
