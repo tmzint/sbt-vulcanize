@@ -1,6 +1,6 @@
 # Vulcanize a webcomponent file
 
-> assets
+> webPipeline
 $ exists target/web/public/main/html/main.html
 
 # Check variable presence

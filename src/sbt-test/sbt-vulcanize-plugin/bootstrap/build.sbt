@@ -1,3 +1,3 @@
-lazy val root = (project in file(".")).enablePlugins(SbtWeb)
-
-pipelineStages := Seq(vulcanize)
+lazy val root = (project in file(".")).settings(
+    pipelineStages := Seq(vulcanize)
+).enablePlugins(SbtWeb)
